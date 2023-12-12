@@ -1,47 +1,42 @@
 import axios from 'axios'
 import {NavigationContainer} from '@react-navigation/native'
-import { createNativethis.StackNavigator } from '@react-navigation/native-this.stack'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import ProductList from './views/ProductsList'
 import ProductDetails from './views/ProductDetails'
 import ModifyProduct from './views/ModifyProduct'
 import React from 'react'
 
-export default class ProductViewModel extends React.Component {
-    constructor() {}
+export default function ProductViewModel() {
 
-    getAllProducts() {
+    const getAllProducts = () => {
         //return axios.get(serverURL/products)
     }
 
-    getProduct(name) {
+    const getProduct = (name) => {
         //return axios.get(serverURL/products/${name})
     }
 
-    addProduct(data) {
+    const addProduct = (data) => {
         //return axios.post(serverURL/products)
     }
 
-    editProduct(data) {
+    const editProduct = (data) => {
         //return axios.put(serverURL/products/${name})
     }
 
-    deleteProduct(name) {
+    const deleteProduct = (name) => {
         //return axios.delete(serverURL/products/${name})
     }
 
-    this.Stack = createNativethis.StackNavigator()
+    const Stack = createNativeStackNavigator()
 
-    render() {
-        return (
-            <NavigationContainer>
-                <this.Stack.Navigator initialRouteName='Products'>
-                    <this.Stack.Screen name='Products'>
-                        {(props) => <ProductList/>}
-                    </this.Stack.Screen>
-                    <this.Stack.Screen name='Product' component={ProductDetails} />
-                    <this.Stack.Screen name='Modification' component={ModifyProduct} />
-                </this.Stack.Navigator>
-            </NavigationContainer>
-        )
-    }
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName='Products'>
+                <Stack.Screen name='Products' component={ProductList}/>
+                <Stack.Screen name='Product' component={ProductDetails}/>
+                <Stack.Screen name='Modification' component={ModifyProduct}/>
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
 }
