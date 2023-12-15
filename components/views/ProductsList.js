@@ -1,11 +1,26 @@
-import React from 'react'
-import { Button, StyleSheet, Text, View } from "react-native";
+import React, {useState} from 'react'
+import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import ProductListItem from './ProductListItem';
 
 function ProductList({navigation}) {
 
+    const [products, setProducts] = useState([
+        {_id: 1, name: 'Bolek', revision: '1.0', price: 2000},
+        {_id: 2, name: 'Lolek', revision: '1.0', price: 2000}
+    ])
+
     return (
         <View style={styles.listAppearance}>
-            <Text>ProductsList</Text>
+            <View style={styles.grid}>
+                <FlatList 
+                    data={products} 
+                    renderItem={({item}) => (
+                    <TouchableOpacity onPress={() => {navigation.navigate('Product', {state: item})}}>
+                        <ProductListItem item={item} style={styles.productItem}/>
+                    </TouchableOpacity>)}
+                    keyExtractor={item => item._id}
+                />
+            </View>
             <View style={styles.bottomMenu}>
                 <Button onPress={() => {
                     navigation.navigate('Modification')
@@ -19,6 +34,18 @@ const styles = StyleSheet.create({
     listAppearance: {
         width: '100%',
         height: '100%'
+    },
+    grid: {
+        width: '100%',
+        height: '85%'
+    },
+    productItem: {
+        width: '85%',
+        margin: 'auto',
+        marginTop: 2,
+        borderColor: '#aaa',
+        borderWidth: 1,
+        borderRadius: 10
     },
     bottomMenu: {
         position: 'absolute',
