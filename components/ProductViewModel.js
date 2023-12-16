@@ -1,25 +1,21 @@
-import axios from 'axios'
+import ProductModel from "./models/ProductModel"
 
 export default class ProductViewModel {
-    constructor() {}
 
-    getAllProducts() {
-        //return axios.get(serverURL/products)
+    constructor () {
+        this.product = new ProductModel("", "", "", 0, 0, false)
     }
 
-    getProduct(name) {
-        //return axios.get(serverURL/products/${name})
+    provideDataForTheProduct(name, revision, class_, availableAmount, price, isAvailable) {
+        this.product.name = name
+        this.product.revision = revision
+        this.product.class = class_
+        this.product.availableAmount = availableAmount
+        this.product.price = price
+        this.product.isAvailable = isAvailable
     }
 
-    addProduct(data) {
-        //return axios.post(serverURL/products)
-    }
-
-    editProduct(data) {
-        //return axios.put(serverURL/products/${name})
-    }
-
-    deleteProduct(name) {
-        //return axios.delete(serverURL/products/${name})
+    getProductData() {
+        return this.product
     }
 }
