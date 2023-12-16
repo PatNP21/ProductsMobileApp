@@ -10,14 +10,4 @@ export default class ProductModel {
         this.isAvailable = isAvailable
     }
 
-    getProductData() {
-        return ({
-            "name": this.name,
-            "revision": this.revision,
-            "class": this.class,
-            "availableAmount": this.availableAmount,
-            "price": this.price,
-            "isAvailable": this.isAvailable
-        })
-    }
 }

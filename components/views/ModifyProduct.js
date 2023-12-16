@@ -1,10 +1,40 @@
-import React from 'react'
-import { Button, StyleSheet, Switch, Text, TextInput, View } from "react-native";
+import React, { useEffect, useState } from 'react'
+import { Button, StyleSheet, Switch, TextInput, View } from "react-native";
 import { useForm, Controller } from 'react-hook-form'
+import ProductViewModel from '../ProductViewModel';
 
-function ModifyProduct({data, addProduct}) {
+function ModifyProduct({route}) {
+
+    const productViewModel = new ProductViewModel()
 
     const {control} = useForm()
+    const [data_, setData_] = useState(productViewModel.getProductData())
+
+    useEffect(() => {
+        console.log(route)
+        if(route.params.mode === 'UPDATE') {
+            document.querySelector('#nameinput').setAttribute('disabled', true)
+            setData_({
+                name: route.params.data.name,
+                revision: route.params.data.current.revision,
+                class_: route.params.data.current.class,
+                availableAmount: route.params.data.current.availableAmount,
+                price: route.params.data.current.price,
+                isAvailable: route.params.data.current.isAvailable
+            })
+        }
+    }, [])
+
+    const handleProduct = () => {
+        productViewModel.provideDataForTheProduct(...data_)
+        console.log(productViewModel.getProductData())
+        if(route.params.mode === 'UPDATE') {
+            route.params.editProduct(productViewModel.getProductData())
+        } else if(route.params.mode === 'CREATE') {
+            route.params.addProduct(productViewModel.getProductData())
+        }
+        
+    }
 
     return (
         <View style={styles.formStyle}>
@@ -12,42 +42,44 @@ function ModifyProduct({data, addProduct}) {
                 name="name" 
                 control={control} 
                 render={({value}) => 
-                    (<TextInput onChangeText={(val) => data.name = val} value={value} placeholder='Name'/>)
+                    (<TextInput id="nameinput" style={styles.input} onChangeText={(val) => data_.name = val} value={value} placeholder='Name'/>)
                 }/>
             <Controller 
                 name="revision" 
                 control={control} 
                 render={({value}) => 
-                    (<TextInput onChangeText={(val) => data.revision = val} value={value} placeholder='Revision'/>)
+                    (<TextInput style={styles.input} onChangeText={(val) => data_.revision = val} value={value} placeholder='Revision'/>)
                 }/>
             <Controller 
                 name="class" 
                 control={control} 
                 render={({value}) => 
-                    (<TextInput onChangeText={(val) => data.class_ = val} value={value} placeholder='Class'/>)
+                    (<TextInput style={styles.input} onChangeText={(val) => data_.class_ = val} value={value} placeholder='Class'/>)
                 }/>
             <Controller 
                 name="availableAmount" 
                 control={control} 
                 render={({value}) => 
-                    (<TextInput keyboardType='numeric' minValue={0} onChangeText={(val) => data.availableAmount = Number(val)} value={value} placeholder='Available amount'/>)
+                    (<TextInput style={styles.input} inputMode='numeric' minValue={0} onChangeText={(val) => data_.availableAmount = Number(val)} value={value} placeholder='Available amount'/>)
                 }/>
             <Controller 
                 name="price" 
                 control={control} 
                 render={({value}) => 
-                    (<TextInput keyboardType='numeric' minValue={0} onChangeText={(val) => data.price = Number(val)} value={value} placeholder='Price'/>)
+                    (<TextInput style={styles.input} inputMode='numeric' minValue={0} onChangeText={(val) => data_.price = Number(val)} value={value} placeholder='Price'/>)
                 }/>
             <Controller 
                 name="isAvailable" 
                 control={control} 
                 render={({value}) => 
-                    (<Switch onChange={(val) => data.isAvailable = val} value={value}/>)
+                    (<Switch onChange={(val) => data_.isAvailable = val} value={value}/>)
                 }/>
-            <Button 
-                title='Submit' 
-                label="Submit" 
-                onPress={addProduct(data)}/>
+            <Controller
+                name="submitBtn"
+                control={control}
+                render={() => 
+                    (<Button title='Submit' onPress={handleProduct}/>)
+                }/>
         </View>
     )
 }
@@ -71,7 +103,7 @@ const styles = StyleSheet.create({
     numberView: {
         margin: 'auto',
         justifyContent: 'center',
-        alignItems: 'center'
+        aligndatas: 'center'
     },
     numberInput: {
         backgroundColor: '#fff',

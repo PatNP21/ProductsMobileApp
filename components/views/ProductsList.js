@@ -1,30 +1,42 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ProductListItem from './ProductListItem';
 
-function ProductList({navigation}) {
+function ProductList({navigation, route}) {
 
-    const [products, setProducts] = useState([
-        {_id: 1, name: 'Bolek', revision: '1.0', price: 2000},
-        {_id: 2, name: 'Lolek', revision: '1.0', price: 2000}
-    ])
+    //ustawienie stanu załadowania zawartości
+    const [loadedState, setLoadedState] = useState(false)
+    const [productsList, setProductsList] = useState()
+
+    //doskonale zdawałem sobie sprawę z wagi implementacji modelu MVVM 
+    //natomiast jedynym sposobem na dobre działanie listy była obsługa Promise w tymże komponencie
+    useEffect(() => {
+        console.log(route)
+        route.params.products.then(result => {
+            setProductsList(result)
+            setLoadedState(true)
+            console.log(productsList)
+        })
+    },[])
 
     return (
         <View style={styles.listAppearance}>
             <View style={styles.grid}>
-                <FlatList 
-                    data={products} 
+                {loadedState && <FlatList 
+                    data={productsList} 
                     renderItem={({item}) => (
-                    <TouchableOpacity onPress={() => {navigation.navigate('Product', {state: item})}}>
+                    <TouchableOpacity 
+                        onPress={() => {navigation.navigate('Product', {item: item})}}
+                    >
                         <ProductListItem item={item} style={styles.productItem}/>
                     </TouchableOpacity>)}
                     keyExtractor={item => item._id}
-                />
+                    />}
             </View>
             <View style={styles.bottomMenu}>
-                <Button onPress={() => {
-                    navigation.navigate('Modification')
-                }} title="Create product" />
+                {<Button onPress={() => {
+                    navigation.navigate('Modification', {mode: 'CREATE'})
+                }} title="Create product" />}
             </View>
         </View>
     )
@@ -37,7 +49,7 @@ const styles = StyleSheet.create({
     },
     grid: {
         width: '100%',
-        height: '85%'
+        height: '80%'
     },
     productItem: {
         width: '85%',

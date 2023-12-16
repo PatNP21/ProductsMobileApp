@@ -5,7 +5,7 @@ export default function ProductListItem({item, style}) {
     return (
         <View style={style}>
             <Text>{item.name}</Text>
-            <Text>{item.price}</Text>
+            <Text>{item.current.price}</Text>
         </View>
     )
 }

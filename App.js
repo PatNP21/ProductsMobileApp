@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
-import ProductViewModel from './components/ProductViewModel.js';
+import ProductService from './components/ProductService.js';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ProductViewModel/>
+      {<ProductService/>}
     </View>
   );
 }
